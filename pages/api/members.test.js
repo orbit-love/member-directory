@@ -1,5 +1,5 @@
 import handle from "./members";
-import { getAllMembers } from "../../helpers/prisma-helpers";
+import { getAllMembers, getMemberByEmail } from "../../helpers/prisma-helpers";
 
 // ------------------------------------------------------
 // Required when testing a route with withAuthCheck
@@ -10,13 +10,14 @@ jest.mock("./auth/[...nextauth]", () => ({
 // Mock a valid session
 jest.mock("next-auth/next", () => ({
   getServerSession: jest.fn().mockResolvedValue({
-    user: { email: "test@test.com" },
+    user: { email: "session@faker.com" },
   }),
 }));
 // ------------------------------------------------------
 
 jest.mock("../../helpers/prisma-helpers", () => ({
   getAllMembers: jest.fn(),
+  getMemberByEmail: jest.fn(),
 }));
 
 const res = {
@@ -31,16 +32,20 @@ describe("/api/members", () => {
   });
 
   it("responds with 200 and returns members & features seperately", async () => {
-    const expectedFeatures = [
-      { id: 1, email: "featured1@faker.com" },
-      { id: 2, email: "featured2@faker.com" },
-    ];
+    const currentMember = {
+      id: 5,
+      email: "session@faker.com",
+      featured: false,
+    };
 
     const expectedMembers = [
-      { id: 1, email: "member1@faker.com" },
-      { id: 2, email: "member2@faker.com" },
+      { id: 1, email: "member1@faker.com", featured: false },
+      { id: 2, email: "member2@faker.com", featured: false },
+      { id: 3, email: "featured1@faker.com", featured: true },
+      { id: 4, email: "featured2@faker.com", featured: true },
     ];
-    getAllMembers.mockResolvedValueOnce(expectedFeatures);
+
+    getMemberByEmail.mockResolvedValueOnce(currentMember);
     getAllMembers.mockResolvedValueOnce(expectedMembers);
 
     const req = { method: "GET" };
@@ -48,13 +53,15 @@ describe("/api/members", () => {
     await handle(req, res);
 
     // Fetches all members
-    expect(getAllMembers).toHaveBeenCalledTimes(2);
-    expect(getAllMembers).toHaveBeenCalledWith({ where: { featured: true } });
-    expect(getAllMembers).toHaveBeenCalledWith({ where: { featured: false } });
+    expect(getMemberByEmail).toHaveBeenCalledWith("session@faker.com");
+    expect(getAllMembers).toHaveBeenCalledWith({
+      where: { NOT: { email: "session@faker.com" } },
+    });
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({
-      featured: expectedFeatures,
-      members: expectedMembers,
+      featured: [expectedMembers[2], expectedMembers[3]],
+      members: [expectedMembers[0], expectedMembers[1]],
+      currentMember: currentMember,
     });
   });
 
