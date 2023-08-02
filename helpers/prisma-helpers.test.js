@@ -2,6 +2,7 @@ import prisma from "../lib/db";
 import {
   getAllMemberEmails,
   getAllMembers,
+  getMemberByEmail,
   updateMember,
 } from "./prisma-helpers";
 
@@ -9,6 +10,7 @@ import {
 jest.mock("../lib/db", () => ({
   member: {
     findMany: jest.fn(),
+    findUnique: jest.fn(),
     update: jest.fn(),
   },
 }));
@@ -88,6 +90,26 @@ describe("#getAllMembers", () => {
     expect(prisma.member.findMany).toHaveBeenCalledWith({
       ...additionalClause,
       orderBy: { name: "asc" },
+      include: { identities: true },
+    });
+  });
+});
+
+describe("#getMemberByEmail", () => {
+  it("fetches a single matching member", async () => {
+    const mockData = [
+      { email: "not-me@example.com", name: "John Doe", identities: [] },
+      { email: "this-one@example.com", name: "Jane Doe", identities: [] },
+    ];
+
+    prisma.member.findUnique.mockResolvedValue(mockData[1]);
+
+    const result = await getMemberByEmail("this-one@example.com");
+    expect(result).toEqual(mockData[1]);
+
+    // Check that findMany was called with the default search queries
+    expect(prisma.member.findUnique).toHaveBeenCalledWith({
+      where: { email: "this-one@example.com" },
       include: { identities: true },
     });
   });

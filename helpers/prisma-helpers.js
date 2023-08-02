@@ -69,6 +69,19 @@ export async function removeMembers(removeList) {
 }
 
 /**
+ * fetch a single member from database by their email
+ *
+ * @param {string} email - the email to find member by
+ * @returns {Promise} a Promise that resolves with all members
+ */
+export async function getMemberByEmail(email) {
+  return prisma.member.findUnique({
+    where: { email: email },
+    include: { identities: true },
+  });
+}
+
+/**
  * fetch all members from the database, ordered by name in ascending order
  *
  * @returns {Promise} a Promise that resolves with all members
