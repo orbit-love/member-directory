@@ -22,7 +22,7 @@ export default function Preview({ initialMembers }) {
         {!!members && members.length > 0 ? (
           <ul
             role="list"
-            className="grid grid-cols-1 gap-x-8 gap-y-16 mt-20 mx-auto max-w-2xl sm:grid-cols-3 lg:mx-0 lg:max-w-none 2xl:grid-cols-4"
+            className="grid grid-cols-1 gap-y-16 gap-x-40 mt-20 mx-auto max-w-2xl sm:grid-cols-3 lg:mx-0 lg:max-w-none 2xl:grid-cols-4"
           >
             {members.map((member) => {
               // Only show members who are visible in directory

@@ -17,7 +17,7 @@ export default function SignIn({ csrfToken }) {
         </p>
 
         <form
-          className="flex gap-x-4 mt-10 mx-auto max-w-lg"
+          className="flex flex-col gap-4 mt-10 mx-auto max-w-lg lg:flex-row"
           method="post"
           action="/api/auth/signin/email"
         >
@@ -32,7 +32,7 @@ export default function SignIn({ csrfToken }) {
             type="email"
             autoComplete="email"
             required
-            className="ring-white/10 text-brand-dark border-brand-light-highlight dark:border-brand-dark-highlight flex-auto py-3.5 px-5 min-w-0 text-lg bg-white rounded-md border ring-1 ring-inset shadow-sm focus:ring-2 focus:ring-inset focus:ring-white sm:leading-6"
+            className="ring-white/10 text-brand-dark border-brand-light-highlight dark:border-brand-dark-highlight flex-auto py-3.5 px-5 min-w-0 text-lg text-center bg-white rounded-md border ring-1 ring-inset shadow-sm focus:ring-2 focus:ring-inset focus:ring-white sm:leading-6 lg:text-left"
             placeholder="Enter your email"
           />
 
