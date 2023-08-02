@@ -59,9 +59,8 @@ describe("/api/members", () => {
     });
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({
-      featured: [expectedMembers[2], expectedMembers[3]],
-      members: [expectedMembers[0], expectedMembers[1]],
-      currentMember: currentMember,
+      featured: [expectedMembers[3], expectedMembers[4]],
+      members: [currentMember, expectedMembers[1], expectedMembers[2]],
     });
   });
 

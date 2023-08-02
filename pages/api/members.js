@@ -17,6 +17,9 @@ async function handle(req, res) {
       where: { NOT: { email: session.user.email } },
     });
 
+    // Put current member to the top of the respective list so they show up first
+    allMembers.unshift(currentMember);
+
     let featured = [];
     let members = [];
 
@@ -25,7 +28,7 @@ async function handle(req, res) {
       member.featured ? featured.push(member) : members.push(member);
     });
 
-    res.status(200).json({ currentMember, featured, members });
+    res.status(200).json({ featured, members });
   } catch (e) {
     console.error(`Something went wrong. ${e.message}`);
     res.status(500).send();

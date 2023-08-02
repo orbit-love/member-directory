@@ -3,12 +3,7 @@ import LayoutAuthenticated from "../components/layout-authenticated";
 import AdminControls from "../components/admin-controls/admin-controls";
 import MemberList from "../components/member-list";
 
-export default function Home({
-  initialCurrentMember,
-  initialMembers,
-  initialFeatured,
-}) {
-  const [currentMember] = useState(initialCurrentMember);
+export default function Home({ initialMembers, initialFeatured }) {
   const [members, setMembers] = useState(initialMembers);
   const [featured] = useState(initialFeatured);
 
@@ -49,7 +44,6 @@ export async function getServerSideProps(context) {
   if (!data) {
     return {
       props: {
-        initialCurrentMember: {},
         initialMembers: [],
         initialFeatured: [],
       },
@@ -58,7 +52,6 @@ export async function getServerSideProps(context) {
 
   return {
     props: {
-      initialCurrentMember: data.currentMember || {},
       initialMembers: data.members || [],
       initialFeatured: data.featured || [],
     },
