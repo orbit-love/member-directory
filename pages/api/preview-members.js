@@ -4,20 +4,16 @@ import { getAllMembers } from "../../helpers/prisma-helpers";
 export default async function handle(req, res) {
   try {
     // Only fetch members shown in public preview
-    const featured = await getAllMembers({
-      where: {
-        featured: true,
-        shownInPublicDirectory: true,
-        shownInDirectory: true,
-      },
+    const allMembers = await getAllMembers({
+      where: { shownInPublicDirectory: true, shownInDirectory: true },
     });
 
-    const members = await getAllMembers({
-      where: {
-        featured: false,
-        shownInPublicDirectory: true,
-        shownInDirectory: true,
-      },
+    let featured = [];
+    let members = [];
+
+    // Categorise members into "filtered" or "not featured". Only iterate on data once
+    allMembers.forEach((member) => {
+      member.featured ? featured.push(member) : members.push(member);
     });
 
     res.status(200).json({ featured, members });

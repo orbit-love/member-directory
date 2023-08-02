@@ -18,16 +18,12 @@ describe("/api/preview-members", () => {
 
   it("responds with 200 and returns members", async () => {
     const expectedMembers = [
-      { id: 1, email: "member1@faker.com" },
-      { id: 2, email: "member2@faker.com" },
+      { id: 1, email: "member1@faker.com", featured: false },
+      { id: 2, email: "member2@faker.com", featured: false },
+      { id: 3, email: "featured1@faker.com", featured: true },
+      { id: 4, email: "featured2@faker.com", featured: true },
     ];
 
-    const expectedFeatured = [
-      { id: 1, email: "featured1@faker.com" },
-      { id: 2, email: "featured2@faker.com" },
-    ];
-
-    getAllMembers.mockResolvedValueOnce(expectedFeatured);
     getAllMembers.mockResolvedValueOnce(expectedMembers);
 
     const req = { method: "GET" };
@@ -35,19 +31,8 @@ describe("/api/preview-members", () => {
     await handle(req, res);
 
     // Filters members to fetch
-    expect(getAllMembers).toBeCalledTimes(2);
-
     expect(getAllMembers).toHaveBeenCalledWith({
       where: {
-        featured: true,
-        shownInPublicDirectory: true,
-        shownInDirectory: true,
-      },
-    });
-
-    expect(getAllMembers).toHaveBeenCalledWith({
-      where: {
-        featured: false,
         shownInPublicDirectory: true,
         shownInDirectory: true,
       },
@@ -55,8 +40,8 @@ describe("/api/preview-members", () => {
 
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({
-      members: expectedMembers,
-      featured: expectedFeatured,
+      members: [expectedMembers[0], expectedMembers[1]],
+      featured: [expectedMembers[2], expectedMembers[3]],
     });
   });
 
