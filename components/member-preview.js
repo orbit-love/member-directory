@@ -5,7 +5,7 @@ export default function MemberPreview({ member }) {
   const [imageError, setImageError] = useState(false);
 
   return (
-    <li key={member.id}>
+    <li key={member.id} className="w-max">
       {imageError || !member.avatar_url ? (
         <div className="mx-auto w-56 h-56 bg-gray-100 rounded-full dark:bg-gray-800"></div>
       ) : (

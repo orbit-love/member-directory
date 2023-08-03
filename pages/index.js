@@ -9,16 +9,15 @@ export default function Home({ initialMembers, initialFeatured }) {
 
   return (
     <LayoutAuthenticated>
-      <div className="px-6 py-24 mx-auto max-w-[80%] sm:py-32 lg:px-8">
+      <div className="px-6 py-24 mx-auto sm:py-32 lg:px-8">
         <section className="mx-auto max-w-2xl sm:text-center">
           <h1 className="text-brand-dark dark:text-brand-light text-3xl font-bold tracking-tight sm:text-4xl">
-            Meet other members
+            Meet DM Dinner Club Members
           </h1>
 
           <p className="text-brand-dark-highlight dark:text-brand-light-highlight mt-6 text-lg leading-8">
-            This is your space to find others in your community. Engage in
-            conversations, share your ideas, and develop strong relationships.
-            Step in, join the dialogue, and explore the community!
+            This is your space to find others in your community. Meet other
+            members, engage in the dialogue, and explore the community!
           </p>
         </section>
 
@@ -44,7 +43,10 @@ export async function getServerSideProps(context) {
 
   if (!data) {
     return {
-      props: { initialMembers: [], initialFeatured: [] },
+      props: {
+        initialMembers: [],
+        initialFeatured: [],
+      },
     };
   }
 

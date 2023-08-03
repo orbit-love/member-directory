@@ -22,11 +22,11 @@ export default function LayoutAuthenticated({ children }) {
 
   // Only show directory if confirmed authenticated
   return (
-    <div className="bg-brand-light dark:bg-brand-dark min-h-screen">
+    <div className="bg-brand-light dark:bg-brand-dark flex flex-col justify-between items-center min-h-screen">
       <Head />
       <Header />
 
-      <main>{children}</main>
+      <main className="max-w-[80%] w-full">{children}</main>
 
       <Footer />
     </div>

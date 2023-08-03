@@ -1,38 +1,41 @@
 import { useState } from "react";
-import MemberPreview from "../components/member-preview";
 import LayoutUnauthenticated from "../components/layout-unauthenticated";
+import MemberList from "../components/member-list";
 
-export default function Preview({ initialMembers }) {
+export default function Preview({ initialFeatured, initialMembers }) {
+  const [featured] = useState(initialFeatured);
   const [members] = useState(initialMembers);
+
+  const LIST_CLASSES =
+    "grid grid-cols-1 gap-y-16 gap-x-40 mt-6 mx-auto max-w-2xl sm:grid-cols-3 lg:mx-0 lg:max-w-none 2xl:grid-cols-4";
 
   return (
     <LayoutUnauthenticated>
       <div className="px-6 w-full lg:px-8">
         <section className="mx-auto max-w-2xl sm:text-center">
           <h1 className="text-brand-dark dark:text-brand-light text-3xl font-bold tracking-tight sm:text-4xl">
-            See members in this community
+            See DM Dinner Club Members
           </h1>
 
           <p className="text-brand-dark-highlight dark:text-brand-light-highlight mt-6 text-lg leading-8">
-            This is your hub to discover members within this community. Sign in
-            to see more details!
+            This is a hub to discover members within this community. Sign in to
+            see more details.
           </p>
         </section>
 
-        {!!members && members.length > 0 ? (
-          <ul
-            role="list"
-            className="grid grid-cols-1 gap-x-8 gap-y-16 mt-20 mx-auto max-w-2xl sm:grid-cols-3 lg:mx-0 lg:max-w-none 2xl:grid-cols-4"
-          >
-            {members.map((member) => {
-              // Only show members who are visible in directory
-              if (member.shownInDirectory)
-                return <MemberPreview member={member} key={member.id} />;
-            })}
-          </ul>
-        ) : (
-          ""
-        )}
+        <MemberList
+          title="Featured Guests"
+          members={featured}
+          listClasses={LIST_CLASSES}
+          preview
+        />
+
+        <MemberList
+          title="All Members"
+          members={members}
+          listClasses={LIST_CLASSES}
+          preview
+        />
       </div>
     </LayoutUnauthenticated>
   );
@@ -48,11 +51,14 @@ export async function getServerSideProps(context) {
 
   if (!data) {
     return {
-      props: { initialMembers: [] },
+      props: { initialMembers: [], initialFeatured: [] },
     };
   }
 
   return {
-    props: { initialMembers: data },
+    props: {
+      initialMembers: data.members || [],
+      initialFeatured: data.featured || [],
+    },
   };
 }

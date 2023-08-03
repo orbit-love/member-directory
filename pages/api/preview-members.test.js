@@ -18,9 +18,12 @@ describe("/api/preview-members", () => {
 
   it("responds with 200 and returns members", async () => {
     const expectedMembers = [
-      { id: 1, email: "member1@faker.com" },
-      { id: 2, email: "member2@faker.com" },
+      { id: 1, email: "member1@faker.com", featured: false },
+      { id: 2, email: "member2@faker.com", featured: false },
+      { id: 3, email: "featured1@faker.com", featured: true },
+      { id: 4, email: "featured2@faker.com", featured: true },
     ];
+
     getAllMembers.mockResolvedValueOnce(expectedMembers);
 
     const req = { method: "GET" };
@@ -34,8 +37,12 @@ describe("/api/preview-members", () => {
         shownInDirectory: true,
       },
     });
+
     expect(res.status).toHaveBeenCalledWith(200);
-    expect(res.json).toHaveBeenCalledWith(expectedMembers);
+    expect(res.json).toHaveBeenCalledWith({
+      members: [expectedMembers[0], expectedMembers[1]],
+      featured: [expectedMembers[2], expectedMembers[3]],
+    });
   });
 
   it("responds with 500 when prisma query fails", async () => {

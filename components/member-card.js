@@ -74,7 +74,7 @@ export default function MemberCard({ member, editable }) {
           {editable ? (
             <button
               onClick={() => setEditState(true)}
-              className="focus-visible:outline-brand-light inline-block py-1.5 px-2 mt-2 text-gray-900 bg-gray-300 rounded-md shadow-sm hover:bg-gray-400 focus:bg-gray-400 focus-visible:outline-2 focus-visible:outline focus-visible:outline-offset-2 dark:bg-gray-200"
+              className="focus-visible:outline-brand-light text-brand-dark dark:text-brand-light border-brand-accent hover:bg-brand-accent focus:bg-brand-accent inline-block py-1.5 px-2 mt-2 font-medium rounded-md border-2 border shadow-sm hover:text-white focus:text-white focus-visible:outline-2 focus-visible:outline focus-visible:outline-offset-2"
             >
               Edit
             </button>
